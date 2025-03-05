@@ -1,6 +1,22 @@
 import Posts from '@/components/posts';
 import { getPosts } from '@/lib/posts';
 
+// export const metadata = {
+//   title: 'Browse all our X posts.',
+//   description: 'Browse all our posts.',
+// };
+
+export async function generatedMetadata(data) {
+  // {params}
+  // {searchParams}
+  const posts = await getPosts();
+  const numOfPosts = posts.length;
+  return {
+    title: `Browse all our ${numOfPosts} posts.`,
+    description: 'Browse all our posts.',
+  };
+}
+
 export default async function FeedPage() {
   const posts = await getPosts();
   return (
