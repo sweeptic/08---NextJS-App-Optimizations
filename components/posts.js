@@ -1,33 +1,28 @@
-"use client";
+'use client';
 
 import { useOptimistic } from 'react';
 
 import { formatDate } from '@/lib/format';
 import LikeButton from './like-icon';
 import { togglePostLikeStatus } from '@/actions/posts';
+import Image from 'next/image';
 
 function Post({ post, action }) {
   return (
     <article className="post">
       <div className="post-image">
-        <img src={post.image} alt={post.title} />
+        <Image src={post.image} alt={post.title} fill />
       </div>
       <div className="post-content">
         <header>
           <div>
             <h2>{post.title}</h2>
             <p>
-              Shared by {post.userFirstName} on{' '}
-              <time dateTime={post.createdAt}>
-                {formatDate(post.createdAt)}
-              </time>
+              Shared by {post.userFirstName} on <time dateTime={post.createdAt}>{formatDate(post.createdAt)}</time>
             </p>
           </div>
           <div>
-            <form
-              action={action.bind(null, post.id)}
-              className={post.isLiked ? 'liked' : ''}
-            >
+            <form action={action.bind(null, post.id)} className={post.isLiked ? 'liked' : ''}>
               <LikeButton />
             </form>
           </div>
@@ -40,7 +35,7 @@ function Post({ post, action }) {
 
 export default function Posts({ posts }) {
   const [optimisticPosts, updateOptimisticPosts] = useOptimistic(posts, (prevPosts, updatedPostId) => {
-    const updatedPostIndex = prevPosts.findIndex(post => post.id === updatedPostId);
+    const updatedPostIndex = prevPosts.findIndex((post) => post.id === updatedPostId);
 
     if (updatedPostIndex === -1) {
       return prevPosts;
@@ -52,7 +47,7 @@ export default function Posts({ posts }) {
     const newPosts = [...prevPosts];
     newPosts[updatedPostIndex] = updatedPost;
     return newPosts;
-  })
+  });
 
   if (!optimisticPosts || optimisticPosts.length === 0) {
     return <p>There are no posts yet. Maybe start sharing some?</p>;
